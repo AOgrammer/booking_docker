@@ -6,6 +6,7 @@ WORKDIR /app
 
 # 必要なパッケージのインストール
 COPY requirements.txt .
+# COPY * .
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # アプリケーションのコピー
