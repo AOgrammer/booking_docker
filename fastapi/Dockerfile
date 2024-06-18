@@ -1,16 +1,19 @@
-# ベースイメージ
-FROM python:3.9
+FROM python:3.9-slim
 
-# 作業ディレクトリの設定
 WORKDIR /app
 
-# 必要なパッケージのインストール
-COPY requirements.txt .
-# COPY * .
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+COPY ./resource/requirements.txt .
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    && pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apt-get remove -y gcc \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
 
-# アプリケーションのコピー
-COPY . .
+COPY ./src .
 
-# FastAPIの起動
+RUN useradd -m fastapi_user
+USER fastapi_user
+
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

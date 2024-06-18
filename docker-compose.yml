@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   fastapi:
     build:
@@ -8,9 +6,12 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./fastapi:/app
+      - ./fastapi/src:/app/src
+      - ./fastapi/resource:/app/resource
+      - ./fastapi/src/sql_app.db:/app/sql_app.db
     environment:
       - SQLALCHEMY_DATABASE_URL=sqlite:///./sql_app.db
+    restart: always
 
   streamlit:
     build:
@@ -21,6 +22,8 @@ services:
     ports:
       - "8501:8501"
     volumes:
-      - ./streamlit:/app
+      - ./streamlit/src:/app/src
+      - ./streamlit/resource:/app/resource
     environment:
       - FASTAPI_URL=http://fastapi:8000
+    restart: always

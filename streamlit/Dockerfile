@@ -1,15 +1,19 @@
-# ベースイメージ
-FROM python:3.9
+FROM python:3.9-slim
 
-# 作業ディレクトリの設定
 WORKDIR /app
 
-# 必要なパッケージのインストール
-COPY requirements.txt .
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+COPY ./resource/requirements.txt .
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    && pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apt-get remove -y gcc \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
 
-# アプリケーションのコピー
-COPY . .
+COPY ./src .
 
-# Streamlitの起動
-CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+RUN useradd -m streamlit_user
+USER streamlit_user
+
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]

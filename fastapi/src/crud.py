@@ -9,13 +9,13 @@ def initialize_data(db: Session):
         return
 
     # Add users
-    user = models.User(username="test_user")
+    user = models.User(username="あおい")
     db.add(user)
     db.commit()
     db.refresh(user)
 
     # Add rooms
-    room = models.Room(room_name="test_room", capacity=10)
+    room = models.Room(room_name="会議室A", capacity=10)
     db.add(room)
     db.commit()
     db.refresh(room)
