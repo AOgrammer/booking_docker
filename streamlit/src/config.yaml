@@ -12,6 +12,9 @@ credentials:
       logged_in: False # Will be managed automatically
       name: user
       password: def # Will be hashed automatically
+  roles:
+    admin: ["admin"]  # 管理者ユーザーのロールリスト
+    user: ["user"]    # 一般ユーザーのロールリスト
 cookie:
   expiry_days: 30
   key: some_signature_key # Must be string

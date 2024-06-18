@@ -27,7 +27,13 @@ authenticator.login()
 if st.session_state["authentication_status"]:
     with st.sidebar:
         authenticator.logout("ログアウト")
-        page = st.selectbox('ページを選択', ['ユーザー登録', '会議室登録', '予約登録', 'ユーザー更新・削除', '会議室更新・削除', '予約更新・削除'])
+        user_name = st.session_state['name']
+        user_roles = config['credentials']['roles'][user_name]  # ユーザーのロールを取得
+
+        page = st.selectbox('ページを選択',
+                           ['予約登録'] if 'user' in user_roles else  # 予約はユーザーのみ許可
+                           ['ユーザー登録', '会議室登録', '予約登録', 'ユーザー更新・削除', '会議室更新・削除', '予約更新・削除'])
+
     
 
     if page == 'ユーザー登録':
